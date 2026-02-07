@@ -174,6 +174,47 @@ public class ServiceEntityUserImpl implements ServiceEntityUser {
 	            Optional<EntityOrganization> optional =  repoEntityOrganization.findByOrganizationName(payload.getOrganization().getOrganizationName());
 	            if(optional.isPresent()) {
 	            	user.setOrganization(optional.get());
+	            	optional.get().setUsers(List.of(user));
+	            	repoEntityOrganization.save(optional.get());
+	            }
+            }
+            
+            if(StringUtils.hasText(payload.getPassword())) {
+            	user.setPassword(encoder.encode(payload.getPassword()));
+            }
+            
+	        EntityUser savedUser = repoEntityUser.save(user);
+	        
+	        return modelMapper.map(savedUser, PayloadUser.class);
+	 }	 
+	 
+	
+	 @Override
+	 public PayloadUser updateUserByIdV3(UUID uuid, PayloadUser payload){
+		 
+		 try {
+			EntityUser user =  repoEntityUser.findById(uuid).orElseThrow(() -> new ResourceNotFoundException("User","id",uuid+""));
+	        BeanUtils.copyProperties(payload, user, UtilsNullProperties.getNullPropertyNames(payload));
+	        if (payload.getAddress() != null) {
+
+	            if (user.getAddress() == null) {
+	                user.setAddress(new EntityAddress());
+	            }
+
+	            BeanUtils.copyProperties(payload.getAddress(),
+	                    user.getAddress(),
+	                    UtilsNullProperties.getNullPropertyNames(payload.getAddress()));     
+	        }
+	        if(user.getOrganization() == null) {
+            	user.setOrganization(new EntityOrganization());
+            }
+            
+            if(payload.getOrganization()!=null && StringUtils.hasText(payload.getOrganization().getOrganizationName())) {
+	            Optional<EntityOrganization> optional =  repoEntityOrganization.findByOrganizationName(payload.getOrganization().getOrganizationName());
+	            if(optional.isPresent()) {
+	            	user.setOrganization(optional.get());
+	            	optional.get().setUsers(List.of(user));
+	            	repoEntityOrganization.save(optional.get());
 	            }
             }
             
@@ -181,9 +222,11 @@ public class ServiceEntityUserImpl implements ServiceEntityUser {
             	user.setPassword(encoder.encode(payload.getPassword()));
             }
 	        EntityUser savedUser = repoEntityUser.save(user);
-	        
 	        return modelMapper.map(savedUser, PayloadUser.class);
+
+
+		 }catch (Exception e) { e.printStackTrace(); }
+	        return null;
 	 }	 
 	 
-	
 }
