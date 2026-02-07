@@ -73,7 +73,7 @@ public class ControlUsers {
 	
 	@PatchMapping("/{id}")
 	public ResponseEntity<?> updateUser(@PathVariable UUID id,@RequestBody PayloadUser payload){
-		return new ResponseEntity<>(serviceEntityUser.updateUserByIdV2(id,payload), HttpStatus.OK);
+		return new ResponseEntity<>(serviceEntityUser.updateUserByIdV3(id,payload), HttpStatus.OK);
 	}	
 	
 	@GetMapping("/payment")

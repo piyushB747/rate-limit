@@ -21,6 +21,8 @@ public interface ServiceEntityUser {
 
 	PayloadUser findByUsername(String username);
 
+	PayloadUser updateUserByIdV3(UUID uuid, PayloadUser payload);
+
 	
 	
 
