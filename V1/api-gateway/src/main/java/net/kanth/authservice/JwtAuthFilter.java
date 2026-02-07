@@ -14,9 +14,11 @@ import reactor.core.publisher.Mono;
 public class JwtAuthFilter implements GlobalFilter {
 
     private final JwtServiceGateway jwtService;
+    private final RateLimitSlidingWindowService  rateLimiter;
 
-    public JwtAuthFilter(JwtServiceGateway jwtService) {
+    public JwtAuthFilter(JwtServiceGateway jwtService,RateLimitSlidingWindowService  rateLimiter) {
         this.jwtService = jwtService;
+        this.rateLimiter = rateLimiter;
     }
 
     @Override
@@ -56,11 +58,22 @@ public class JwtAuthFilter implements GlobalFilter {
         	   return exchange.getResponse().setComplete();
         }
         
-        ServerWebExchange modifiedExchange = exchange.mutate()
-                .request(exchange.getRequest().mutate()
-                        .header("X-USER-ID", userId)
-                        .build())
-                .build();
-        return chain.filter(modifiedExchange);
+        // ✅ Rate Limit Check (Example: 5 requests in 10 seconds)
+        return rateLimiter.isAllowed(userId, 5, 10)
+                .flatMap(allowed -> {
+
+                    if (!allowed) {
+                        exchange.getResponse().setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
+                        return exchange.getResponse().setComplete();
+                    }
+                    
+                    ServerWebExchange modifiedExchange = exchange.mutate()
+                            .request(exchange.getRequest().mutate()
+                                    .header("X-USER-ID", userId)
+                                    .build())
+                            .build();
+
+                    return chain.filter(modifiedExchange);
+                });
     }
 }
