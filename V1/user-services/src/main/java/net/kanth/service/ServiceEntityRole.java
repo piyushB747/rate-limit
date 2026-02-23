@@ -22,5 +22,7 @@ public interface ServiceEntityRole {
 
 	void removeUserRoleV2(String userId, String roleName);
 
+	void createSomeUser();
+
 
 }

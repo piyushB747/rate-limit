@@ -48,4 +48,6 @@ public class ControlRole {
     	serviceEntityRole.removeUserRoleV2(userId,roleName);
     	return new ResponseEntity<>("Role Deleted Succssfully!", HttpStatus.OK);
     }
+    
+  
 }

@@ -52,6 +52,7 @@ public class ServiceEntityUserImpl implements ServiceEntityUser {
         EntityUser entityUser =  modelMapper.map(payload, EntityUser.class);    
         EntityOrganization organization = serviceEntityOrganization.findByOrganizationName(payload.getOrganization().getOrganizationName());
         entityUser.setOrganization(organization);
+        entityUser.setPassword(encoder.encode(payload.getPassword()));
         EntityUser savedUser = repoEntityUser.save(entityUser); 
         
         /* Default Role To User*/

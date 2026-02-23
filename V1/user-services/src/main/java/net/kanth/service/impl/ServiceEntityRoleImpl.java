@@ -3,17 +3,23 @@ package net.kanth.service.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.kanth.entity.EntityOrganization;
 import net.kanth.entity.EntityRole;
 import net.kanth.entity.EntityUser;
 import net.kanth.entity.EntityUserRole;
 import net.kanth.entity.UserRoleId;
+import net.kanth.enums.EnumCountry;
+import net.kanth.enums.EnumOrganizationType;
 import net.kanth.exceptions.ResourceNotFoundException;
 import net.kanth.payload.PayloadRole;
+import net.kanth.repo.RepoEntityOrganization;
 import net.kanth.repo.RepoEntityRole;
 import net.kanth.repo.RepoEntityUser;
 import net.kanth.repo.RepoEntityUserRole;
@@ -28,7 +34,8 @@ public class ServiceEntityRoleImpl implements ServiceEntityRole{
 	private RepoEntityRole repoEntityRole;
 	private RepoEntityUser repoEntityUser;
 	private RepoEntityUserRole repoEntityUserRole;
-
+	private RepoEntityOrganization repoEntityOrganization;
+	
 	@Override
 	public List<PayloadRole> findAllRoles() {	
 		return repoEntityRole.findAllRolesOnly();
@@ -106,6 +113,37 @@ public class ServiceEntityRoleImpl implements ServiceEntityRole{
 	 @Override
 	 public void removeUserRoleV2(String userId, String roleName) {
 	     repoEntityUserRole.deleteRoleFromUser(UUID.fromString(userId),roleName);
+	 }
+
+	 @Override
+	 public void createSomeUser() {
+			
+			EntityOrganization organization = new EntityOrganization();
+		    organization.setOrganizationName("Kite Limited");
+		    organization.setGstno("27ABCDE1234F1Z5");
+		    organization.setCeo("Suraj Prajapati");
+		    organization.setSalesPerson("Ravi Sharma");
+		    organization.setType(EnumOrganizationType.SYSTEM);
+		    organization.setPhoneno("9876543210");
+		    organization.setEmail("kite@limited.com");
+		    organization.setWebsite("www.kitelimited.com");
+		    organization.setStreet("Santacruz East");
+		    organization.setCity("Mumbai");
+		    organization.setState("Maharashtra");
+		    organization.setCountryCode(EnumCountry.INDIA);
+		    organization.setPincode("400050");
+		    
+		    repoEntityOrganization.save(organization);
+		    
+		    EntityRole admin = new EntityRole();
+			admin.setRoleName("MANAGER");
+			
+			EntityRole user = new EntityRole();
+			user.setRoleName("SALES");	
+			
+			List<EntityRole> lst = List.of(user,admin);
+			
+			repoEntityRole.saveAll(lst);
 	 }
 
 }

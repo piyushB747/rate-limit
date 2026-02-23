@@ -37,7 +37,8 @@ public class ConfigSecurity {
 	SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
 		return httpSecurity.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(auth -> 
-				        auth.requestMatchers("/api/users/**").permitAll().requestMatchers("/api/users/login/**").permitAll()
+				        auth.requestMatchers("/api/users/login/**").permitAll()
+				        .requestMatchers("/apiv1demo/createsomeuser/**").permitAll()
 						.anyRequest().authenticated())
 				.httpBasic(Customizer.withDefaults())
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
