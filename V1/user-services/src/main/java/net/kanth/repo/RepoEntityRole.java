@@ -18,4 +18,7 @@ public interface RepoEntityRole extends JpaRepository<EntityRole, UUID> {
 	@Query("SELECT r FROM EntityRole r Where r.roleName =:roleName")
 	Optional<EntityRole> findByRoleName(String roleName);
 	
+	boolean existsByRoleName(String roleName);
+
+	
 }

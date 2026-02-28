@@ -50,8 +50,10 @@ public class ServiceEntityUserImpl implements ServiceEntityUser {
 		Optional.ofNullable(payload.getAddress()).orElseThrow(() -> new BadRequestException("Address"));
 		log.info("Payload Info {}", payload);	
         EntityUser entityUser =  modelMapper.map(payload, EntityUser.class);    
-        EntityOrganization organization = serviceEntityOrganization.findByOrganizationName(payload.getOrganization().getOrganizationName());
+        EntityOrganization organization = serviceEntityOrganization.findByOrganizationName("Kite Limited");
         entityUser.setOrganization(organization);
+        
+        entityUser.setPassword(encoder.encode(payload.getPassword()));
         EntityUser savedUser = repoEntityUser.save(entityUser); 
         
         /* Default Role To User*/

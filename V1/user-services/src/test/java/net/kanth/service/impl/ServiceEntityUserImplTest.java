@@ -20,6 +20,7 @@ import net.kanth.entity.EntityUserRole;
 import net.kanth.entity.UserRoleId;
 import net.kanth.enums.EnumCountry;
 import net.kanth.payload.PayloadAddress;
+import net.kanth.payload.PayloadOrganization;
 import net.kanth.payload.PayloadUser;
 import net.kanth.repo.RepoEntityRole;
 import net.kanth.repo.RepoEntityUser;
@@ -82,6 +83,10 @@ class ServiceEntityUserImplTest {
         p1.setUsername("amita10");
         p1.setPassword("abcd1234");
 
+        PayloadOrganization organization = new PayloadOrganization();
+        organization.setOrganizationName("Kite Limited");
+        
+        p1.setOrganization(organization);
         
         PayloadAddress payloadAddress = new PayloadAddress();
         payloadAddress.setPhoneNo("9320885533");

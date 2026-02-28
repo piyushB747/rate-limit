@@ -8,6 +8,8 @@ import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.util.HashSet;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,6 +32,8 @@ public class EntityRole {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private UUID id;
+	
+	@Column(nullable=false,unique=true)
 	private String roleName;
 	
 	@OneToMany(mappedBy = "role")

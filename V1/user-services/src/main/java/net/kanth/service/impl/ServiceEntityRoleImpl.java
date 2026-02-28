@@ -107,5 +107,6 @@ public class ServiceEntityRoleImpl implements ServiceEntityRole{
 	 public void removeUserRoleV2(String userId, String roleName) {
 	     repoEntityUserRole.deleteRoleFromUser(UUID.fromString(userId),roleName);
 	 }
+	
 
 }

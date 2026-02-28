@@ -31,8 +31,6 @@ public class ControlUsers {
 	private AuthService authService;
 	private InterfacePayment payment;
 	
-	
-	
 	public ControlUsers(ServiceEntityUser serviceEntityUser,  @Qualifier("cardpayment")  InterfacePayment payment,AuthService authService) {
 		super();
 		this.serviceEntityUser = serviceEntityUser;
